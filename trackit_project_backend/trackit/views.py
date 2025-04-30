@@ -2,11 +2,18 @@ from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Tracker
-from .serializers import TrackerSerializer
+from .models import Tracker, Application
+from .serializers import TrackerSerializer, ApplicationSerializer
 
 
 
+# Helper Method : saves it from calling get_object_or_404 in every method
+def get_object( model , pk ):
+    return get_object_or_404( model, pk = pk )
+
+
+
+# Tracker Model
 class TrackerCreateView(APIView): 
     # POST request -> Create new Tracker
 
@@ -29,12 +36,6 @@ class TrackerListView(APIView):
 
 
 
-# Helper Method : saves it from calling get_object_or_404 in every method
-def get_object( pk ):
-    return get_object_or_404(Tracker, pk = pk)
-
-
-
 class TrackerDetailView(APIView):
 
     def get(self, request, pk):
@@ -42,7 +43,7 @@ class TrackerDetailView(APIView):
         # Serialize it with the Tracker serializer
         # Return it
 
-        tracker = get_object(pk)
+        tracker = get_object(Tracker , pk)
         serializer = TrackerSerializer(tracker)
         return Response(serializer.data, status=200)
 
@@ -54,7 +55,7 @@ class TrackerDeleteView(APIView):
         # Get the Tracker
         # Delete the Tracker
         # Return the appropriate Responce
-        tracker = get_object(pk)
+        tracker = get_object( Tracker, pk )
         tracker.delete()
         return Response(status=204)
 
@@ -66,7 +67,7 @@ class TrackerUpdateView(APIView):
         # if the update is valid 
             # Save it 
             # Return approprate Responce 
-        tracker = get_object(pk)
+        tracker = get_object( Tracker , pk )
         serializer = TrackerSerializer(tracker, data = request.data)
         if serializer.is_valid():
             serializer.save()
@@ -75,6 +76,15 @@ class TrackerUpdateView(APIView):
 
 
 
+# Application Model
+class ApplicationCreateView(APIView):
+    # POST request -> Create new Application
 
+    def post(self, request):
+        serializer = ApplicationSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
 
 
