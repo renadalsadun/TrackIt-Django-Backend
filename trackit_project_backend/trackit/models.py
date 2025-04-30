@@ -12,6 +12,12 @@ class Tracker(models.Model):
         return self.name
     
 
+PRIORITY = (
+    ('C' , 'Critical'),
+    ('H' ,'High'),
+    ('M' ,'Medium'),
+    ('L' ,'Low')
+)
 
 class Application(models.Model): 
     name = models.CharField(max_length=100)
@@ -25,7 +31,14 @@ class Application(models.Model):
     link = models.CharField(max_length=100, blank=True )
     description = models.CharField(max_length=100, blank=True )
     referral = models.CharField(max_length=100, blank=True )
+    contact = models.CharField( max_length = 100 , blank = True )
     notes = models.TextField( blank=True )
+
+    priority = models.CharField(
+        max_length = 1,
+        choices = PRIORITY,
+        blank = True
+    )
     
     date_applied = models.DateField(null=True, blank=True)
     deadline = models.DateField( null=True, blank=True)
