@@ -26,3 +26,23 @@ class TrackerListView(APIView):
         trackers = Tracker.objects.all() 
         serializer = TrackerSerializer(trackers, many=True)
         return Response(serializer.data, status=200)
+
+
+
+# Helper Method : saves it from calling get_object_or_404 in every method
+def get_object( pk ):
+    return get_object_or_404(Tracker, pk = pk)
+
+
+
+class TrackerDetailView(APIView):
+
+    def get(self, request, pk):
+        # GET the Tracker object 
+        # Serialize it with the Tracker serializer
+        # Return it
+
+        tracker = get_object(pk)
+        serializer = TrackerSerializer(tracker)
+        return Response(serializer.data, status=200)
+    

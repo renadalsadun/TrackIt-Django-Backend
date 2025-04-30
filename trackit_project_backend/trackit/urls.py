@@ -1,11 +1,12 @@
 
 from django.urls import path
 
-from .views import TrackerCreateView, TrackerListView
+from .views import TrackerCreateView, TrackerListView, TrackerDetailView
 
 
 
 urlpatterns = [
-    path('tracker/new', TrackerCreateView.as_view(), name='tracker-create'),
+    path('trackers/new', TrackerCreateView.as_view(), name='tracker-create'),
     path('trackers/', TrackerListView.as_view(), name='tracker-list'),
+    path('trackers/<int:pk>/', TrackerDetailView.as_view(), name='tracker-detail')
 ]
