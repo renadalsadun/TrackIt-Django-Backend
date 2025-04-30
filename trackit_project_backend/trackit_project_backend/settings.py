@@ -32,6 +32,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    #app name
+    
     # default Django apps
     'django.contrib.admin',
     'django.contrib.auth',
@@ -42,6 +44,7 @@ INSTALLED_APPS = [
 
     # third-party and local apps
     'rest_framework', # Need to add this to Installed Apps
+    'trackit'
 ]
 
 MIDDLEWARE = [
