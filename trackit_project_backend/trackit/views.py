@@ -45,4 +45,17 @@ class TrackerDetailView(APIView):
         tracker = get_object(pk)
         serializer = TrackerSerializer(tracker)
         return Response(serializer.data, status=200)
-    
+
+
+
+class TrackerDeleteView(APIView):
+
+    def delete(self, request, pk):
+        # Get the Tracker
+        # Delete the Tracker
+        # Return the appropriate Responce
+        tracker = get_object(pk)
+        tracker.delete()
+        return Response(status=204)
+        
+
