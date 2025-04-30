@@ -124,4 +124,15 @@ class ApplicationDeleteView(APIView):
 
 
 
-#
+class ApplicationUpdateView(APIView):
+    def patch(self, request, pk):
+        # Get the Application 
+        # if the update is valid 
+            # Save it 
+            # Return approprate Responce 
+        application = get_object( Application , pk )
+        serializer = ApplicationSerializer(application, data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status = 200)
+        return Response(serializer.errors, status = 400)
