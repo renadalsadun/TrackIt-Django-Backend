@@ -109,3 +109,19 @@ class ApplicationDetailView(APIView):
         application = get_object(Application , pk)
         serializer = ApplicationSerializer(application)
         return Response(serializer.data, status=200)
+
+
+
+class ApplicationDeleteView(APIView):
+
+    def delete(self, request, pk):
+        # Get the Application
+        # Delete the Application
+        # Return the appropriate Responce
+        application = get_object( Application, pk )
+        application.delete()
+        return Response(status=204)
+
+
+
+#
