@@ -88,3 +88,12 @@ class ApplicationCreateView(APIView):
         return Response(serializer.errors, status=400)
 
 
+
+class ApplicationListView(APIView):
+    # GET request -> View all Applications
+
+    def get(self, request):
+        applications = Application.objects.all() 
+        serializer = ApplicationSerializer(applications, many=True)
+        return Response(serializer.data, status=200)
+
