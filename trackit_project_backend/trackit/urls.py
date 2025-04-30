@@ -2,7 +2,7 @@
 from django.urls import path
 
 from .views import (TrackerCreateView, TrackerListView, TrackerDetailView, TrackerDeleteView, TrackerUpdateView,
-                    ApplicationCreateView, ApplicationListView)
+                    ApplicationCreateView, ApplicationListView, ApplicationDetailView)
 
 
 
@@ -14,5 +14,6 @@ urlpatterns = [
     path('trackers/<int:pk>/update/', TrackerUpdateView.as_view(), name='tracker-update' ),
     path('applications/new', ApplicationCreateView.as_view(), name='application-create'),
     path('applications/', ApplicationListView.as_view(), name='application-list'),
+    path('applications/<int:pk>/', ApplicationDetailView.as_view(), name='application-detail'),
 
 ]

@@ -97,3 +97,15 @@ class ApplicationListView(APIView):
         serializer = ApplicationSerializer(applications, many=True)
         return Response(serializer.data, status=200)
 
+
+
+class ApplicationDetailView(APIView):
+
+    def get(self, request, pk):
+        # GET the Application object 
+        # Serialize it with the Application serializer
+        # Return it
+
+        application = get_object(Application , pk)
+        serializer = ApplicationSerializer(application)
+        return Response(serializer.data, status=200)
