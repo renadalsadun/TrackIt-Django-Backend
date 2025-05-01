@@ -172,3 +172,17 @@ class DocumentDetailView(APIView):
         document = get_object(Document , pk)
         serializer = DocumentSerializer(document)
         return Response(serializer.data, status=200)
+
+
+
+class DocumentDeleteView(APIView):
+
+    def delete(self, request, pk):
+        # Get the Document
+        # Delete the Document
+        # Return the appropriate Responce
+        document = get_object( Document, pk )
+        document.delete()
+        return Response(status=204)
+
+
