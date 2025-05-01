@@ -3,7 +3,7 @@ from django.urls import path
 
 from .views import (TrackerCreateView, TrackerListView, TrackerDetailView, TrackerDeleteView, TrackerUpdateView,
                     ApplicationCreateView, ApplicationListView, ApplicationDetailView, ApplicationDeleteView, ApplicationUpdateView,
-                    DocumentCreateView, DocumentListView, DocumentDetailView, DocumentDeleteView)
+                    DocumentCreateView, DocumentListView, DocumentDetailView, DocumentDeleteView, DocumentUpdateView)
 
 
 
@@ -22,5 +22,6 @@ urlpatterns = [
     path('documents/', DocumentListView.as_view(), name='document-list'),
     path('documents/<int:pk>/', DocumentDetailView.as_view(), name='document-detail'),
     path('documents/<int:pk>/delete/', DocumentDeleteView.as_view(), name='document-delete' ),
+    path('documents/<int:pk>/update/', DocumentUpdateView.as_view(), name='document-update' )
 
 ]

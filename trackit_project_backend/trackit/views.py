@@ -186,3 +186,16 @@ class DocumentDeleteView(APIView):
         return Response(status=204)
 
 
+
+class DocumentUpdateView(APIView):
+    def patch(self, request, pk):
+        # Get the Document 
+        # if the update is valid 
+            # Save it 
+            # Return approprate Responce 
+        document = get_object( Document , pk )
+        serializer = DocumentSerializer(document, data = request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status = 200)
+        return Response(serializer.errors, status = 400)
