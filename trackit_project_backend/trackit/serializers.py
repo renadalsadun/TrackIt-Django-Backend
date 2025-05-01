@@ -11,6 +11,12 @@ class TrackerSerializer(serializers.ModelSerializer):
 
 
 class ApplicationSerializer(serializers.ModelSerializer):
+    documents = serializers.PrimaryKeyRelatedField(
+        many = True,
+        queryset = Document.objects.all(),
+        allow_empty = True,
+        required=False
+    )
     class Meta:
         model = Application
         fields = '__all__'
