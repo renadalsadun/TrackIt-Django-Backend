@@ -139,7 +139,7 @@ class ApplicationUpdateView(APIView):
 
 
 
-#Document
+#Document model
 class DocumentCreateView(APIView):
     # POST request -> Create new Document
 
@@ -158,4 +158,17 @@ class DocumentListView(APIView):
     def get(self, request):
         documents = Document.objects.all() 
         serializer = DocumentSerializer(documents, many=True)
+        return Response(serializer.data, status=200)
+
+
+
+class DocumentDetailView(APIView):
+
+    def get(self, request, pk):
+        # GET the Document object 
+        # Serialize it with the Document serializer
+        # Return it
+
+        document = get_object(Document , pk)
+        serializer = DocumentSerializer(document)
         return Response(serializer.data, status=200)
