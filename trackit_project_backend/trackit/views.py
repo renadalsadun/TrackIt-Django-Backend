@@ -149,3 +149,13 @@ class DocumentCreateView(APIView):
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+
+
+
+class DocumentListView(APIView):
+    # GET request -> View all Documents
+
+    def get(self, request):
+        documents = Document.objects.all() 
+        serializer = DocumentSerializer(documents, many=True)
+        return Response(serializer.data, status=200)
