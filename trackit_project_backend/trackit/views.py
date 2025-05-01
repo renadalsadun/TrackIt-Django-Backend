@@ -2,8 +2,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Tracker, Application
-from .serializers import TrackerSerializer, ApplicationSerializer
+from .models import Tracker, Application, Document
+from .serializers import TrackerSerializer, ApplicationSerializer, DocumentSerializer
 
 
 
@@ -136,3 +136,16 @@ class ApplicationUpdateView(APIView):
             serializer.save()
             return Response(serializer.data, status = 200)
         return Response(serializer.errors, status = 400)
+
+
+
+#Document
+class DocumentCreateView(APIView):
+    # POST request -> Create new Document
+
+    def post(self, request):
+        serializer = DocumentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
