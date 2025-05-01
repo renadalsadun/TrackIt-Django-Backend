@@ -32,8 +32,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    #app name
-    
+
+    'corsheaders', # for CORS problem
     # default Django apps
     'django.contrib.admin',
     'django.contrib.auth',
@@ -44,10 +44,11 @@ INSTALLED_APPS = [
 
     # third-party and local apps
     'rest_framework', # Need to add this to Installed Apps
-    'trackit'
+    'trackit' # app name
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware', #for CORS problem
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -128,3 +129,4 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+CORS_ALLOW_ALL_ORIGINS = True # for CORS problem
