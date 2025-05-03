@@ -1,13 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.postgres.fields import ArrayField
 
 
 
 class Tracker(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)    
-    date_created = models.DateTimeField(auto_now_add=True)
-
+    date_created = models.DateField(auto_now_add=True)
+    fields = ArrayField(# source : Django documentations
+        models.CharField(max_length=50),
+        size = 50, # number of all the possible fields
+    )
+    
     def __str__(self):
         return self.name
 
