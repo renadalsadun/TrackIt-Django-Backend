@@ -37,9 +37,9 @@ PRIORITY = (
 )
 
 class Application(models.Model): 
-    name = models.CharField(max_length=100)
     tracker = models.ForeignKey(Tracker, on_delete=models.CASCADE)
 
+    name = models.CharField(max_length=100, blank=True)
     company = models.CharField(max_length=100, blank=True )
     organization = models.CharField(max_length=100, blank=True )
     university = models.CharField(max_length=100, blank=True )
