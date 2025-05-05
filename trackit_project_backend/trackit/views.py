@@ -24,7 +24,9 @@ class TrackerCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        serializer = TrackerSerializer(data=request.data)
+        data = request.data.copy()
+        data['user'] = request.user.id
+        serializer = TrackerSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=201)
@@ -52,8 +54,10 @@ class TrackerDetailView(APIView):
         # Return it
 
         tracker = get_object(Tracker , pk)
-        serializer = TrackerSerializer(tracker)
-        return Response(serializer.data, status=200)
+        if tracker.user == request.user:
+            serializer = TrackerSerializer(tracker)
+            return Response(serializer.data, status=200)
+        return Response(status=400)
 
 
 
@@ -65,8 +69,10 @@ class TrackerDeleteView(APIView):
         # Delete the Tracker
         # Return the appropriate Responce
         tracker = get_object( Tracker, pk )
-        tracker.delete()
-        return Response(status=204)
+        if tracker.user == request.user:
+            tracker.delete()
+            return Response(status=204)
+        return Response(status = 400)
 
 
 
@@ -79,10 +85,11 @@ class TrackerUpdateView(APIView):
             # Save it 
             # Return approprate Responce 
         tracker = get_object( Tracker , pk )
-        serializer = TrackerSerializer(tracker, data = request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status = 200)
+        if tracker.user == request.user:
+            serializer = TrackerSerializer(tracker, data = request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status = 200)
         return Response(serializer.errors, status = 400)
 
 
@@ -162,7 +169,9 @@ class DocumentCreateView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        serializer = DocumentSerializer(data=request.data)
+        data = request.data.copy()
+        data['user'] = request.user.id
+        serializer = DocumentSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=201)
@@ -190,8 +199,11 @@ class DocumentDetailView(APIView):
         # Return it
 
         document = get_object(Document , pk)
-        serializer = DocumentSerializer(document)
-        return Response(serializer.data, status=200)
+        if document.user == request.user:
+
+            serializer = DocumentSerializer(document)
+            return Response(serializer.data, status=200)
+        return Response(status=400)
 
 
 
@@ -203,8 +215,10 @@ class DocumentDeleteView(APIView):
         # Delete the Document
         # Return the appropriate Responce
         document = get_object( Document, pk )
-        document.delete()
-        return Response(status=204)
+        if document.user == request.user:
+            document.delete()
+            return Response(status=204)
+        return Response(status=400)
 
 
 
@@ -217,10 +231,12 @@ class DocumentUpdateView(APIView):
             # Save it 
             # Return approprate Responce 
         document = get_object( Document , pk )
-        serializer = DocumentSerializer(document, data = request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status = 200)
+        if document.user == request.user:
+
+            serializer = DocumentSerializer(document, data = request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status = 200)
         return Response(serializer.errors, status = 400)
 
 
@@ -255,3 +271,4 @@ class SignUpView(APIView):
             },
             status=201
         )
+    
