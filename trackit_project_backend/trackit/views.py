@@ -1,6 +1,11 @@
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
+from django.contrib.auth.models import User
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from .models import Tracker, Application, Document
 from .serializers import TrackerSerializer, ApplicationSerializer, DocumentSerializer
@@ -16,6 +21,7 @@ def get_object( model , pk ):
 # Tracker Model
 class TrackerCreateView(APIView): 
     # POST request -> Create new Tracker
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         serializer = TrackerSerializer(data=request.data)
@@ -28,15 +34,17 @@ class TrackerCreateView(APIView):
 
 class TrackerListView(APIView):
     # GET request -> View all Trackers
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        trackers = Tracker.objects.all() 
+        trackers = Tracker.objects.filter(user = request.user) 
         serializer = TrackerSerializer(trackers, many=True)
         return Response(serializer.data, status=200)
 
 
 
 class TrackerDetailView(APIView):
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, pk):
         # GET the Tracker object 
@@ -50,6 +58,7 @@ class TrackerDetailView(APIView):
 
 
 class TrackerDeleteView(APIView):
+    permission_classes = [IsAuthenticated]
 
     def delete(self, request, pk):
         # Get the Tracker
@@ -62,6 +71,8 @@ class TrackerDeleteView(APIView):
 
 
 class TrackerUpdateView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def patch(self, request, pk):
         # Get the Tracker 
         # if the update is valid 
@@ -79,6 +90,7 @@ class TrackerUpdateView(APIView):
 # Application Model
 class ApplicationCreateView(APIView):
     # POST request -> Create new Application
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         serializer = ApplicationSerializer(data=request.data)
@@ -91,6 +103,7 @@ class ApplicationCreateView(APIView):
 
 class ApplicationListView(APIView):
     # GET request -> View all Applications
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         applications = Application.objects.all() 
@@ -100,6 +113,7 @@ class ApplicationListView(APIView):
 
 
 class ApplicationDetailView(APIView):
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, pk):
         # GET the Application object 
@@ -113,6 +127,7 @@ class ApplicationDetailView(APIView):
 
 
 class ApplicationDeleteView(APIView):
+    permission_classes = [IsAuthenticated]
 
     def delete(self, request, pk):
         # Get the Application
@@ -125,6 +140,8 @@ class ApplicationDeleteView(APIView):
 
 
 class ApplicationUpdateView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def patch(self, request, pk):
         # Get the Application 
         # if the update is valid 
@@ -142,6 +159,7 @@ class ApplicationUpdateView(APIView):
 #Document model
 class DocumentCreateView(APIView):
     # POST request -> Create new Document
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         serializer = DocumentSerializer(data=request.data)
@@ -154,15 +172,17 @@ class DocumentCreateView(APIView):
 
 class DocumentListView(APIView):
     # GET request -> View all Documents
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        documents = Document.objects.all() 
+        documents = Document.objects.filter(user = request.user) 
         serializer = DocumentSerializer(documents, many=True)
         return Response(serializer.data, status=200)
 
 
 
 class DocumentDetailView(APIView):
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, pk):
         # GET the Document object 
@@ -176,6 +196,7 @@ class DocumentDetailView(APIView):
 
 
 class DocumentDeleteView(APIView):
+    permission_classes = [IsAuthenticated]
 
     def delete(self, request, pk):
         # Get the Document
@@ -188,6 +209,8 @@ class DocumentDeleteView(APIView):
 
 
 class DocumentUpdateView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def patch(self, request, pk):
         # Get the Document 
         # if the update is valid 
@@ -199,3 +222,36 @@ class DocumentUpdateView(APIView):
             serializer.save()
             return Response(serializer.data, status = 200)
         return Response(serializer.errors, status = 400)
+
+
+
+#Authentication
+class SignUpView(APIView): 
+    permission_classes = [AllowAny] 
+    def post(self, request):
+        # Using .get will not error if there's no username
+        username = request.data.get('username')
+        email = request.data.get('email')
+        password = request.data.get('password')
+
+        try:
+            validate_password(password)
+        except ValidationError as err:
+            return Response({'error': err.messages}, status=400)
+
+        # Actually create the user
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password
+        )
+
+        # create an access and refresh token for the user and send this in a response
+        tokens = RefreshToken.for_user(user)
+        return Response(
+            {
+                'refresh': str(tokens),
+                'access': str(tokens.access_token)
+            },
+            status=201
+        )

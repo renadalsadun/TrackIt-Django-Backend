@@ -1,9 +1,11 @@
 
 from django.urls import path
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from .views import (TrackerCreateView, TrackerListView, TrackerDetailView, TrackerDeleteView, TrackerUpdateView,
                     ApplicationCreateView, ApplicationListView, ApplicationDetailView, ApplicationDeleteView, ApplicationUpdateView,
-                    DocumentCreateView, DocumentListView, DocumentDetailView, DocumentDeleteView, DocumentUpdateView)
+                    DocumentCreateView, DocumentListView, DocumentDetailView, DocumentDeleteView, DocumentUpdateView,
+                    SignUpView)
 
 
 
@@ -22,6 +24,10 @@ urlpatterns = [
     path('documents/', DocumentListView.as_view(), name='document-list'),
     path('documents/<int:pk>/', DocumentDetailView.as_view(), name='document-detail'),
     path('documents/<int:pk>/delete/', DocumentDeleteView.as_view(), name='document-delete' ),
-    path('documents/<int:pk>/update/', DocumentUpdateView.as_view(), name='document-update' )
+    path('documents/<int:pk>/update/', DocumentUpdateView.as_view(), name='document-update' ),
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('signup/', SignUpView.as_view(), name='signup')
+
 
 ]
