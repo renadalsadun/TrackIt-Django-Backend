@@ -7,6 +7,8 @@ class TrackerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tracker
         fields = '__all__' 
+        read_only_fields = ['user']
+
 
 
 
