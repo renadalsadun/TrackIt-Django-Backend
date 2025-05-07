@@ -22,7 +22,7 @@ React, React Router, React Toastify, Bulma CSS, Axios, Uploadcare, JWT
 
 ## ER Diagram
 
-
+![erd](<Screenshot 2025-05-08 at 2.07.40 AM.png>)
 
 ## Routing Table
 ### 1. SERVER
@@ -77,20 +77,36 @@ document-delete|	`api/documents/<int:pk>/delete/`|	DELETE|	Delete a Document|
 
 ## Installation Instructions
 1. Clone Repositories:
+
+
 `https://git.generalassemb.ly/renad/TrackIt-React-Frontend.git`
 `https://git.generalassemb.ly/renad/TrackIt-Django-Backend.git`
 
 2. Set up the Backend 
+
+
 `cd backend-folder`
+
+
 
 `pipenv shell`
 
+
+
 `python manage.py runserver`
 
+
+
 3. Set up Frontend 
+
+
 `cd frontend-folder`
 
+
+
 `npm install`
+
+
 
 `npm run dev`
 
