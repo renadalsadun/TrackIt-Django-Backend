@@ -25,10 +25,9 @@ class TrackerCreateView(APIView):
 
     def post(self, request):
         data = request.data.copy()
-        data['user'] = request.user.id
         serializer = TrackerSerializer(data=data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(user=request.user)
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
 
