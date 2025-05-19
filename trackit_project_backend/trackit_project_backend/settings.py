@@ -86,8 +86,32 @@ WSGI_APPLICATION = 'trackit_project_backend.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
+DB_URL = os.getenv('DB_URL')
+if DB_URL:
+    db_info = DB_URL.split('://')[1]
 
-DATABASES = { 
+    user_pass, host_port_db = db_info.split('@')
+    user, password = user_pass.split(':')
+
+    host_port, db_name = host_port_db.split('/')
+
+    if ':' in host_port:
+        host, port = host_port.split(':')
+    else:
+        host = host_port
+        port = '5432'  
+    DATABASES = {
+        'default': {
+            'ENGINE': os.getenv('DB_ENGINE'),
+            'NAME': db_name,
+            'USER': user,
+            'PASSWORD': password,
+            'HOST': host,
+            'PORT': port,
+        }
+    }
+else:
+    DATABASES = { 
     'default': {
         'ENGINE': os.getenv('DB_ENGINE'),
         'NAME': os.getenv('DB_NAME'),
